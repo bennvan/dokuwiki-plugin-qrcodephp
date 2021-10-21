@@ -1,0 +1,7 @@
+base   qrcodephp
+author Ben van magill, Daniel Pätzold
+email  ben.vanmagill16@gmail.com
+date   2021-21-10
+name   PHP QR Code
+desc   Display QR Code
+url    https://github.com/bennvan/dokuwiki-plugin-qrcodephp
