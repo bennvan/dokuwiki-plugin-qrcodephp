@@ -46,7 +46,7 @@ class syntax_plugin_qrcodephp extends DokuWiki_Syntax_Plugin {
      * Connect pattern to lexer
      */
     function connectTo($mode) {
-        $this->Lexer->addSpecialPattern('\{\{\s?QRCODE(?:\s\d{1,}|)>[^}]*\}\}',$mode,'plugin_qrcodephp');
+        $this->Lexer->addSpecialPattern('\{\{QRCODE(?:\s\d{1,}|)>[^}]*\}\}',$mode,'plugin_qrcodephp');
     }
 
 
@@ -54,22 +54,22 @@ class syntax_plugin_qrcodephp extends DokuWiki_Syntax_Plugin {
      * Handle the match
      */
     function handle($match, $state, $pos, Doku_Handler $handler){
-        // Strip the opening and closing markup
-        $match = preg_replace(array('/^\{\{/','/\}\}$/u'),'',$match);
-        $ralign = (bool)preg_match('/^ /',$match);
-        $lalign = (bool)preg_match('/ $/',$match);
+        // Strip the opening and closing markup {{QRCODE......}}
+        $match = substr($match, 8,-2);
 
-        // trim any spaces
-        $match = trim($match);
+        // Split pixelperpoint from qr data
+        list($ppp, $qr) = explode('>',$match,2);
 
-        // Split title from URL
-        list($params, $qr) = explode('>',$match,2);
-        list($_, $ppp) = explode(' ', $params, 2);
+        // trim any white spaces
+        $ppp = trim($ppp);
+        $qr  = trim($qr);
 
         // ppp=pixel per point to default
-        if (!$ppp) $ppp = 4;
+        if (empty($ppp)) $ppp = 4;
         // Check alignment
         
+        $ralign = (bool)preg_match('/^ /',$qr);
+        $lalign = (bool)preg_match('/ $/',$qr);
         if ( $lalign & $ralign ) {
         $align = 'center';
         } else if ( $ralign ) {
